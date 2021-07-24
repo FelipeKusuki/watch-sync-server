@@ -11,7 +11,7 @@ let userList = []
 let videoList = ['https://www.youtube.com/watch?v=ERFXravD0AU']
 
 // const SERVER_HOST = process.env.HOST
-const SERVER_PORT = process.env.PORT
+const SERVER_PORT = process.env.PORT || 8080
 
 io.on('connection', socket => {
     console.log('CONSEGUIU CONECTAR')
