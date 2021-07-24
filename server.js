@@ -1,15 +1,17 @@
 const Koa = require('koa')
 const http = require('http')
 const socket = require('socket.io')
+const cors = require('@koa/cors');
 
 const app = new Koa()
+app.use(cors());
 const server = http.createServer(app.callback())
 const io = socket(server)
 let userList = []
 let videoList = ['https://www.youtube.com/watch?v=ERFXravD0AU']
 
-const SERVER_HOST = 'localhost'
-const SERVER_PORT = '8080'
+// const SERVER_HOST = process.env.HOST
+const SERVER_PORT = process.env.PORT
 
 io.on('connection', socket => {
     console.log('CONSEGUIU CONECTAR')
@@ -28,11 +30,9 @@ io.on('connection', socket => {
     })
 
     socket.on('removeUser', (userName) => {
-        console.log("RFEMOSALÇKJFSÇA")
         if(userList.length > 1) {
             userList.forEach((element, index) => {
                 if(element === userName) {
-                    console.log("ACHOU ELEMENTO")
                     userList.splice(index, 1)
                 }
             })
@@ -57,7 +57,7 @@ io.on('connection', socket => {
     })
 
     socket.on('playOrPause', (data) => {
-        console.log('playOrPause', data)
+        console.log('playOrPause', data
         // Talvez so precise de apenas um desses emit
         // socket.broadcast.emit('messageBroadcast', data)
         io.emit('receivePlayOrPause', data)
@@ -70,6 +70,6 @@ io.on('connection', socket => {
     
 })
 
-server.listen(SERVER_PORT, SERVER_HOST, () => {
+server.listen(SERVER_PORT, () => {
     console.log('ENTROU NO SERVER')
 })
