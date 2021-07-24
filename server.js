@@ -4,7 +4,7 @@ const socket = require('socket.io')
 const cors = require('@koa/cors');
 
 const app = new Koa()
-app.use(cors());
+app.use(cors({origin:'*'}));
 const server = http.createServer(app.callback())
 const io = socket(server)
 let userList = []
@@ -57,7 +57,6 @@ io.on('connection', socket => {
     })
 
     socket.on('playOrPause', (data) => {
-        console.log('playOrPause', data
         // Talvez so precise de apenas um desses emit
         // socket.broadcast.emit('messageBroadcast', data)
         io.emit('receivePlayOrPause', data)
