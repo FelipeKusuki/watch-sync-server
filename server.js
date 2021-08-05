@@ -25,19 +25,9 @@ io.on('connection', socket => {
     })
 
     socket.on('addUser', (userName) => {
-        userList.push(userName)
+        if(!userName) return;
+        userList.push({ id: socket.id, name: userName })
         io.emit('receiveUserList', userList)
-    })
-
-    socket.on('removeUser', (userName) => {
-        if(userList.length > 1) {
-            userList.forEach((element, index) => {
-                if(element === userName) {
-                    userList.splice(index, 1)
-                }
-            })
-            io.emit('receiveUserList', userList)
-        }
     })
 
     socket.on('addVideo', (newUrl) => {
@@ -64,6 +54,11 @@ io.on('connection', socket => {
 
     socket.on('syncVideo', (time) => {
         io.emit('receiveSyncVideo', time)
+    })
+
+    socket.on('disconnect', () => {
+        userList = userList.filter(u => u.id !== socket.id);
+        io.emit('disconnect', userList);
     })
 
     
